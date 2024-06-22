@@ -1,0 +1,122 @@
+﻿@model Thurston_Exam.Models.Employee
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete Employee</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            <label for="FirstName">First Name</label>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            <label for="LastName">Last Name</label>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" id="deleteBtn" class="btn btn-default" data-id="@Model.EmployeeID" />
+            |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    $(document).ready(function () {
+        $('#deleteBtn').click(function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            var employeeId = $(this).data('id');
+
+            if (!employeeId) {
+                console.error('Employee ID is undefined or null.');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true, // Show loader animation while waiting for AJAX response
+                preConfirm: () => {
+                    return $.ajax({
+                        url: '/Employee/Delete/' + employeeId,
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        }
+                    }).then((response) => {
+                        return response; // Resolve the promise with the AJAX response
+                    }).catch((error) => {
+                        Swal.fire(
+                            'Error!',
+                            'Error deleting employee: ' + error.responseText,
+                            'error'
+                        );
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading() // Prevent closing Swal while AJAX request is ongoing
+            }).then((result) => {
+                if (result.isConfirmed && result.value.success) {
+                    // Show success message without the "Okay" button
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: result.value.message,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500 // Automatically close after 1.5 seconds
+                    }).then(() => {
+                        window.location.href = '@Url.Action("Index", "Employee")'; // Redirect after success message
+                    });
+                }
+            });
+        });
+    });
+    </script>
+
+
+
+}
+
