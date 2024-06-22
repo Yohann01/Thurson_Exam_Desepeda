@@ -45,13 +45,13 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="button" id="btnCreate" class="btn btn-default">Create</button>
+            <button type="button" id="btnCreate" class="btn btn-success">Create</button>
         </div>
     </div>
 </form>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
 </div>
 
 @section Scripts {

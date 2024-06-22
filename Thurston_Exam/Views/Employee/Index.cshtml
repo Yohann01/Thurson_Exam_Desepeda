@@ -9,9 +9,9 @@
 <form method="get" action="@Url.Action("Index")">
     <div class="create-search-container">
         <div class="create-container">
-            <p>
-                @Html.ActionLink("Create New", "Create")
-            </p>
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+
+
         </div>
 
         <div class="form-group search-container" id="search-container">
@@ -50,9 +50,10 @@ else
                     <td>@employee.Email</td>
                     <td>@employee.Position</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = employee.EmployeeID })
-                        @Html.ActionLink("Details", "Details", new { id = employee.EmployeeID })
-                        @Html.ActionLink("Delete", "Delete", new { id = employee.EmployeeID })
+                        @Html.ActionLink("Edit", "Edit", new { id = employee.EmployeeID }, new { @class = "btn btn-info" })
+
+                        @Html.ActionLink("Details", "Details", new { id = employee.EmployeeID }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Delete", "Delete", new { id = employee.EmployeeID }, new { @class = "btn btn-danger" })
                     </td>
                 </tr>
             }
